@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+</head>
+<body>
+    <h1>Welcome, {{ bookings['username'] }}</h1>
+    <p>Your email: {{ bookings['email'] }}</p>
+
+    <!-- Display user bookings with bike details -->
+    <h2>Your Bookings</h2>
+    {% if bookings %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Booking ID</th>
+                    <th>Bike Model</th>
+                    <th>Booking Date</th>
+                    <th>Bike Name</th>
+                    <!-- <th>Km</th> -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                    <tr>
+                        <td>{{ booking['bookingid'] }}</td>
+                        <td>{{ booking['bikemodel'] }}</td>
+                        <td>{{ booking['bookingdate'] }}</td>
+                        <td>{{ booking['bikename'] }}</td>
+                        <!-- <td>{{ booking['bikekm'] }}</td> -->
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No bookings found.</p>
+    {% endif %}
+
+    <a href="{{ url_for('auth_routes.logout') }}">Logout</a>
+</body>
+</html>
