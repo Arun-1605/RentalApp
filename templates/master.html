@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Bikes</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Manage Bikes</h2>
+        
+        <!-- Add New Bike Button -->
+        <a href="{{ url_for('admin_routes.add_or_update_bike') }}" class="btn btn-success mb-3">
+            <i class="fas fa-plus"></i> Add New Bike
+        </a>
+
+        <!-- Bike List Table -->
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Bike Name</th>
+                    <th>Price</th>
+                    <th>Km</th>
+                    <th>Model</th>
+                    <th>IsAvailable</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bike in bikes %}
+                <tr>
+                    <td>{{ bike['id'] }}</td>
+                    <td>{{ bike['bikename'] }}</td>
+                    <td>{{ bike['price'] }}</td>
+                    <td>${{ bike['Km'] }}</td>
+                    <td>{{ bike['Model'] }}</td>
+                    <td>{{ bike['Isavailable'] }}</td>
+                    <td>
+                        <!-- Edit Button with Icon -->
+                        <a href="{{ url_for('admin_routes.post_bike_form', bike_id=bike['id']) }}" class="btn btn-warning">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="text-center">No bikes found</td>
+                </tr>
+                {% endfor %}                
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

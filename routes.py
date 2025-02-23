@@ -1,37 +1,23 @@
 from flask import Blueprint, render_template, request, redirect, flash, session, url_for
 import pymysql
 from werkzeug.security import generate_password_hash, check_password_hash
-from config import Config
+import os
+from db import get_db_connection
 
+# Blueprints
 auth_routes = Blueprint('auth_routes', __name__)
 index_routes = Blueprint('index_routes', __name__)
 
-# Function to connect to the database
-def get_db_connection():
-    connection = pymysql.connect(
-        charset="utf8mb4",
-        host=Config.DB_HOST,
-        user=Config.DB_USER,
-        password=Config.DB_PASSWORD,
-        db=Config.DB_NAME,
-        port=Config.DB_PORT,
-        cursorclass=pymysql.cursors.DictCursor,
-    )
-    return connection
 
-
-
-
-# Index route
 @index_routes.route('/')
 def index():
     connection = get_db_connection()
     cursor = connection.cursor()
     cursor.execute('SELECT * FROM bikes')
-    tours = cursor.fetchall()
+    bikes = cursor.fetchall()
     cursor.close()
     connection.close()
-    return render_template('index.html', tours=tours)
+    return render_template('index.html', bikes=bikes)
 
 # Signup route
 @auth_routes.route('/signup', methods=['GET', 'POST'])
@@ -68,7 +54,6 @@ def signup():
 
     return render_template('signup.html')
 
-
 # Login route
 @auth_routes.route('/login', methods=['GET', 'POST'])
 def login():
@@ -92,21 +77,21 @@ def login():
         if user:
             # Compare the password (Assuming passwords are hashed in the DB)
             if check_password_hash(user['password'], password):
-                
-                  # Use check_password_hash to compare
-                # If the password matches, redirect to profile
-                return redirect(url_for('auth_routes.profile', id=user['id']))
+                if user['usertype'] == 'admin':
+                    return redirect(url_for('admin_routes.getadmin', id=user['id']))
+                else:
+                    return redirect(url_for('auth_routes.profile', id=user['id']))
             else:
                 flash('Incorrect password', 'danger')
         else:
             flash('User not found', 'danger')
 
         # If login fails, redirect back to login page
-        return redirect(url_for('login'))
+        return redirect(url_for('auth_routes.login'))
 
     return render_template('login.html')
 
-
+# Logout route
 @auth_routes.route('/logout')
 def logout():
     # Remove the user session or perform other cleanup tasks
@@ -114,7 +99,7 @@ def logout():
     flash('You have been logged out successfully', 'success')
     return redirect(url_for('auth_routes.login'))
 
-
+# Profile route
 @auth_routes.route('/profile/<id>')
 def profile(id):
     # Fetch user profile data from DB
@@ -122,7 +107,7 @@ def profile(id):
     cursor = connection.cursor()
 
     # Call stored procedure to fetch user bookings with bike details
-    cursor.callproc('GetUserBookingsWithBikeDetails', (id))
+    cursor.callproc('GetUserBookingsWithBikeDetails', (id,))
     
     bookings = cursor.fetchall()
 

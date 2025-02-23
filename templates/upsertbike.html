@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if bike %}Edit{% else %}Add{% endif %} Bike</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>{% if bike %}Edit{% else %}Add{% endif %} Bike</h2>
+
+        <!-- Bike Form -->
+        <form method="POST">
+            <div class="form-group">
+                <label for="bike_name">Bike Name</label>
+                <input type="text" class="form-control" id="bike_name" name="bike_name" 
+                       value="{{ bike['bikename'] if bike else '' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="bike_type">Bike Type</label>
+                <input type="text" class="form-control" id="bike_type" name="bike_type" 
+                       value="{{ bike['biketype'] if bike else '' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="bike_price">Price</label>
+                <input type="number" class="form-control" id="bike_price" name="bike_price" 
+                       value="{{ bike['price'] if bike else '' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="bike_description">Km</label>
+                <input type="text" class="form-control" id="bike_description" name="bike_description" 
+                       value="{{ bike['km'] if bike else '' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="is_available">Is Available</label>
+                <select class="form-control" id="is_available" name="is_available">
+                    <option value="1" {% if bike and bike['isavailable'] == 1 %}selected{% endif %}>Yes</option>
+                    <option value="0" {% if bike and bike['isavailable'] == 0 %}selected{% endif %}>No</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">
+                {% if bike %}Update Bike{% else %}Add Bike{% endif %}
+            </button>
+        </form>
+    </div>
+</body>
+</html>
