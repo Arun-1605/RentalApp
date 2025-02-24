@@ -10,33 +10,47 @@
     <div class="container mt-5">
         <h2>{% if bike %}Edit{% else %}Add{% endif %} Bike</h2>
 
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="alert alert-dismissible fade show" role="alert">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endif %}
+        {% endwith %}
+
         <!-- Bike Form -->
         <form method="POST">
             <div class="form-group">
-                <label for="bike_name">Bike Name</label>
-                <input type="text" class="form-control" id="bike_name" name="bike_name" 
+                <label for="bikename">Bike Name</label>
+                <input type="text" class="form-control" id="bikename" name="bikename" 
                        value="{{ bike['bikename'] if bike else '' }}" required>
             </div>
             <div class="form-group">
-                <label for="bike_type">Bike Type</label>
-                <input type="text" class="form-control" id="bike_type" name="bike_type" 
-                       value="{{ bike['biketype'] if bike else '' }}" required>
+                <label for="model">Bike Type</label>
+                <input type="text" class="form-control" id="model" name="model" 
+                       value="{{ bike['model'] if bike else '' }}" required>
             </div>
             <div class="form-group">
-                <label for="bike_price">Price</label>
-                <input type="number" class="form-control" id="bike_price" name="bike_price" 
+                <label for="price">Price</label>
+                <input type="number" class="form-control" id="price" name="price" 
                        value="{{ bike['price'] if bike else '' }}" required>
             </div>
             <div class="form-group">
-                <label for="bike_description">Km</label>
-                <input type="text" class="form-control" id="bike_description" name="bike_description" 
+                <label for="km">Km</label>
+                <input type="text" class="form-control" id="km" name="km" 
                        value="{{ bike['km'] if bike else '' }}" required>
             </div>
             <div class="form-group">
-                <label for="is_available">Is Available</label>
-                <select class="form-control" id="is_available" name="is_available">
-                    <option value="1" {% if bike and bike['isavailable'] == 1 %}selected{% endif %}>Yes</option>
-                    <option value="0" {% if bike and bike['isavailable'] == 0 %}selected{% endif %}>No</option>
+                <label for="Isavailable">Is Available</label>
+                <select class="form-control" id="Isavailable" name="Isavailable">
+                    <option value="1" {% if bike and bike['Isavailable'] == 1 %}selected{% endif %}>Yes</option>
+                    <option value="0" {% if bike and bike['Isavailable'] == 0 %}selected{% endif %}>No</option>
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">
@@ -44,5 +58,9 @@
             </button>
         </form>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

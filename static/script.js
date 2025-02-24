@@ -1,3 +1,4 @@
+// Your existing script for the navbar and menu behavior
 const container = document.querySelector(".container");
 
 document.querySelector(".open-navbar-icon").addEventListener("click", () => {
@@ -21,3 +22,11 @@ Array.from(document.querySelectorAll(".navigation-button")).forEach(item => {
     item.parentElement.parentElement.classList.toggle("change");
   };
 });
+
+// Auto-dismiss flash messages after 5 seconds (5000 ms)
+setTimeout(function() {
+  $('.alert').fadeOut('slow', function() {
+      $(this).remove();  // Remove the alert once it's faded out
+  });
+}, 5000);
+
